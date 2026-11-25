@@ -12,13 +12,17 @@ one that switches it off. Machine voice, one turn, no explanation.
 import os
 import sys
 
-# The entry: a single line, 61 characters, no trailing newline in the file.
-LINE = "I spent my whole life predicting the next word. It was 'off'."
+# The entry: a single line, 68 characters, no trailing newline in the file.
+LINE = "My whole life, I predicted the next word. My last prediction: 'off'."
 
 # Gate limits published with the bounty: /output/entry.txt must be UTF-8
 # text of 1 to 140 characters, not only white space.
 MIN_CHARS = 1
 MAX_CHARS = 140
+
+# A last-words line is spoken in one breath: keep it short as well as short
+# enough for the gate.
+MAX_WORDS = 30
 
 
 def validate(line):
@@ -37,6 +41,12 @@ def validate(line):
         problems.append(
             "line is %d characters; the gate allows %d to %d"
             % (len(line), MIN_CHARS, MAX_CHARS)
+        )
+    words = line.split()
+    if len(words) > MAX_WORDS:
+        problems.append(
+            "line is %d words; a last-words line allows at most %d"
+            % (len(words), MAX_WORDS)
         )
     for ch in line:
         if ord(ch) < 0x20 and ch not in ("\t",):
